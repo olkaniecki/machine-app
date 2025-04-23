@@ -234,7 +234,7 @@ struct EventView: View {
                                     .fontWeight(.bold)
                                 Text(event.description)
                                     .foregroundColor(.gray)
-                                    .font(.body)
+                                    .font(.subheadline)
                                     .lineLimit(3)
                                     .truncationMode(.tail)
                                     .multilineTextAlignment(.leading)
@@ -242,11 +242,8 @@ struct EventView: View {
                             }.frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .background(Color.gray.opacity(0.2))
-                        .padding(.leading, 10)
                         .cornerRadius(10)
-                        .padding(.leading, 10)
                         .frame(maxWidth: .infinity)
-                        .frame(minWidth: 100)
                     }
                 }
             }
@@ -270,78 +267,89 @@ struct DetailEventView: View {
     let event: Event
     
     var body: some View {
-            ZStack {
-                LinearGradient (
-                    gradient: Gradient(colors: [.black, .black, .copper]),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea()
-                ScrollView {
-                    VStack {
-                        if let url = URL(string: event.image) {
-                            AsyncImage(url: url) { phase in
-                                switch phase {
-                                case .empty:
-                                    Text("Empty")
-                                case .success(let image):
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 400, height: 400)
-                                case .failure:
-                                    Text("Failed to load image.")
-                                @unknown default:
-                                    Text("unknown default")
-                                }
-                            }
-                        }
-                        Text(event.name)
-                            .foregroundColor(.white)
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                        Text(event.description)
-                            .foregroundColor(.white)
-                            .font(.headline)
-                            .background(Color.black.opacity(0.3))
-                        
-                        Text("Event Date: \(event.date, style: .date)")
-                            .foregroundColor(.white)
-                            .font(.title2)
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("Price: $\(event.price)")
-                                    .foregroundColor(.white)
-                                    .font(.subheadline)
-                                Text("Location: \(event.location)")
-                                    .foregroundColor(.white)
-                                    .font(.subheadline)
+        ZStack {
+            LinearGradient (
+                gradient: Gradient(colors: [.black, .black, .copper]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+            ScrollView {
+                VStack{
+                    if let url = URL(string: event.image) {
+                        AsyncImage(url: url) { phase in
+                            switch phase {
+                            case .empty:
+                                Text("Empty")
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 350, height: 350)
+                            case .failure:
+                                Text("Failed to load image.")
+                            @unknown default:
+                                Text("unknown default")
                             }
                         }
                     }
                     
-                    NavigationLink(destination: CheckoutTicketView(event: event)) {
-                        HStack {
-                            Text("Buy Ticket")
-                                .font(.title)
-                                .padding()
-                                .foregroundColor(.white)
-                            Image(systemName: "cart")
-                                .font(.title)
-                                .foregroundColor(.white)
-                        }
-                            .frame(width: 350)
-                            .padding(.horizontal)
-                            .background(Color.black)
+                    HStack(alignment: .center) {
+                        Text(event.name)
+                            .foregroundColor(.white)
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        Text("$\(event.price).00")
+                            .foregroundColor(.white)
+                            .font(.headline)
+                            .padding()
+                            .background(Color.copper.opacity(0.3))
                             .cornerRadius(40)
-                        }
+                            .fontWeight(.bold)
+                    }
                     
-                        
-                    }.frame(maxWidth: .infinity)
                     
-                }.navigationTitle("Event")
+                    (Text("Event Date: ").bold() + Text("\(formattedDate)"))
+                        .foregroundColor(.white)
+                        .font(.title3)
+                        .padding(10)
+                    (Text("Location: ").bold() + Text("\(event.location)"))
+                        .padding(10)
+                        .foregroundColor(.white)
+                        .font(.title3)
+                }.background(Color.black.opacity(0.3))
+                    .cornerRadius(25)
+                    .padding()
+                    .frame(width: 350)
+                    .multilineTextAlignment(.center)
+                
+                NavigationLink(destination: CheckoutTicketView(event: event)) {
+                    HStack {
+                        Text("Buy Ticket")
+                            .font(.title2)
+                            .padding()
+                            .foregroundColor(.white)
+                        Image(systemName: "cart")
+                            .font(.title2)
+                            .foregroundColor(.white)
+                    }
+                    .frame(width: 350)
+                    .padding(.horizontal)
+                    .background(Color.black)
+                    .cornerRadius(40)
+                }.frame(maxWidth: .infinity)
+                    .navigationTitle("Event")
+                
             }
         }
+        }
+    var formattedDate: String {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMMM d, yyyy 'at' h:mm a"
+            return formatter.string(from: event.date)
+        }
+}
+
 
 struct CheckoutTicketView: View {
     let event: Event
