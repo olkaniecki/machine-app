@@ -10,6 +10,7 @@ import SwiftUI
 import Firebase
 import FirebaseFirestore
 import FirebaseAuth
+import FirebaseStorage
 
 // Event Data Structure
 struct Event: Identifiable {
@@ -119,11 +120,10 @@ struct TicketView: View {
                             .foregroundColor(.copper)
                     } .padding()
                     
-                    // Purchased Tickets Header
+                    // Purchased Tickets
                     PurchasedTicketView()
-                    // Upcoming Events Header
+                    // Upcoming Events
                     EventView()
-                    
                 }
                 
             }.background(Color.black)
@@ -131,6 +131,8 @@ struct TicketView: View {
     }
 }
 
+
+// List of Purchased Tickets given UID
 struct PurchasedTicketView: View {
     @StateObject var purchaseModel = PurchasedTicketModel()
     
@@ -229,7 +231,9 @@ struct DetailTicketView: View {
     let ticket: Ticket
     
     var body: some View {
-        VStack {}
+        VStack {
+            
+        }
     }
 }
 
@@ -237,19 +241,23 @@ struct DetailEventView: View {
     let event: Event
     
     var body: some View {
-        VStack {
-            Text(event.name)
-                .foregroundColor(.white)
-                .font(.title)
-            Text("$\(event.price)")
-                .foregroundColor(.white)
-                .font(.subheadline)
-            Text(event.date, style: .date)
-                .foregroundColor(.white)
-                .font(.headline)
-            
-            
-        }.background(Color.black)
+        NavigationView{
+            VStack {
+                Text(event.name)
+                    .foregroundColor(.white)
+                    .font(.title)
+                Text("$\(event.price)")
+                    .foregroundColor(.white)
+                    .font(.subheadline)
+                Text(event.date, style: .date)
+                    .foregroundColor(.white)
+                    .font(.headline)
+                Text(event.description)
+                    .foregroundColor(.white)
+                    .font(.headline)
+                
+            }.background(Color.black)
+        }
     }
 }
 
