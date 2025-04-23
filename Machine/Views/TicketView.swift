@@ -1,9 +1,7 @@
 //
 //  TicketView.swift
-//  Machine
 //
-//  Created by Erik Kaniecki on 4/21/25.
-//
+//  Hub for available events, ticket purchasing, and ticket display on Apple Wallet
 
 
 import SwiftUI
@@ -11,6 +9,7 @@ import Firebase
 import FirebaseFirestore
 import FirebaseAuth
 import FirebaseStorage
+import UIKit
 
 // Event Data Structure
 struct Event: Identifiable {
@@ -20,6 +19,7 @@ struct Event: Identifiable {
     var date: Date
     var location: String
     var description: String
+    var image: String
 }
 
 // Ticket Data Structure
@@ -60,8 +60,9 @@ class EventModel: ObservableObject {
                     let date = timestamp?.dateValue() ?? Date()
                     let location = data["Address"] as? String ?? ""
                     let description = data["Description"] as? String ?? ""
+                    let image = data["Image"] as? String ?? ""
                     
-                    return Event(id: id, name: name, price: price, date: date, location: location, description: description)
+                    return Event(id: id, name: name, price: price, date: date, location: location, description: description, image: image)
                 } ?? []
             }
     }
@@ -102,7 +103,6 @@ class PurchasedTicketModel: ObservableObject {
     }
 }
 
-
 struct TicketView: View {
     var body: some View {
         NavigationView {
@@ -127,7 +127,7 @@ struct TicketView: View {
                 }
                 
             }.background(Color.black)
-        }
+        }.tint(.copper)
     }
 }
 
@@ -200,26 +200,55 @@ struct EventView: View {
             // List of Upcoming Events
             ForEach(viewModel.events) { event in
                 NavigationLink(destination: DetailEventView(event: event)) {
-                    VStack{
-                        Text(event.name)
-                            .foregroundColor(.white)
-                            .font(.headline)
-                        Text(event.date, style: .date)
-                            .foregroundColor(.white)
-                            .font(.subheadline)
-                        Text("$\(event.price)")
-                            .foregroundColor(.white)
-                            .font(.subheadline)
-                        Text(event.description)
-                            .foregroundColor(.white)
+                        HStack{
+                            // Event Image Display
+                            if let url = URL(string: event.image) {
+                                AsyncImage(url: url) { phase in
+                                    switch phase {
+                                    case .empty:
+                                        Text("Empty")
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 150, height: 150)
+                                            .padding(.vertical)
+                                    case .failure:
+                                        Text("Failed to load image.")
+                                    @unknown default:
+                                        Text("unknown default")
+                                    }
+                                }
+                            }
+                            VStack(alignment: .leading) {
+                                Text(event.name)
+                                    .foregroundColor(.white)
+                                    .font(.title2)
+                                Text(event.date, style: .date)
+                                    .foregroundColor(.copper)
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+                                Text("$\(event.price)")
+                                    .foregroundColor(.copper)
+                                    .font(.subheadline)
+                                    .fontWeight(.bold)
+                                Text(event.description)
+                                    .foregroundColor(.gray)
+                                    .font(.body)
+                                    .lineLimit(3)
+                                    .truncationMode(.tail)
+                                    .multilineTextAlignment(.leading)
+                                    .padding(.horizontal, 5)
+                            }.frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .background(Color.gray.opacity(0.2))
+                        .padding(.leading, 10)
+                        .cornerRadius(10)
+                        .padding(.leading, 10)
+                        .frame(maxWidth: .infinity)
+                        .frame(minWidth: 100)
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .frame(minWidth: 40)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
                 }
-            }
             }
         } .onAppear {
             viewModel.fetchEvents()
@@ -241,27 +270,81 @@ struct DetailEventView: View {
     let event: Event
     
     var body: some View {
-        NavigationView{
-            VStack {
-                Text(event.name)
-                    .foregroundColor(.white)
-                    .font(.title)
-                Text("$\(event.price)")
-                    .foregroundColor(.white)
-                    .font(.subheadline)
-                Text(event.date, style: .date)
-                    .foregroundColor(.white)
-                    .font(.headline)
-                Text(event.description)
-                    .foregroundColor(.white)
-                    .font(.headline)
-                
-            }.background(Color.black)
+            ZStack {
+                LinearGradient (
+                    gradient: Gradient(colors: [.black, .black, .copper]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
+                ScrollView {
+                    VStack {
+                        if let url = URL(string: event.image) {
+                            AsyncImage(url: url) { phase in
+                                switch phase {
+                                case .empty:
+                                    Text("Empty")
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 400, height: 400)
+                                case .failure:
+                                    Text("Failed to load image.")
+                                @unknown default:
+                                    Text("unknown default")
+                                }
+                            }
+                        }
+                        Text(event.name)
+                            .foregroundColor(.white)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                        Text(event.description)
+                            .foregroundColor(.white)
+                            .font(.headline)
+                            .background(Color.black.opacity(0.3))
+                        
+                        Text("Event Date: \(event.date, style: .date)")
+                            .foregroundColor(.white)
+                            .font(.title2)
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text("Price: $\(event.price)")
+                                    .foregroundColor(.white)
+                                    .font(.subheadline)
+                                Text("Location: \(event.location)")
+                                    .foregroundColor(.white)
+                                    .font(.subheadline)
+                            }
+                        }
+                    }
+                    
+                    NavigationLink(destination: CheckoutTicketView(event: event)) {
+                        HStack {
+                            Text("Buy Ticket")
+                                .font(.title)
+                                .padding()
+                                .foregroundColor(.white)
+                            Image(systemName: "cart")
+                                .font(.title)
+                                .foregroundColor(.white)
+                        }
+                            .frame(width: 350)
+                            .padding(.horizontal)
+                            .background(Color.black)
+                            .cornerRadius(40)
+                        }
+                    
+                        
+                    }.frame(maxWidth: .infinity)
+                    
+                }.navigationTitle("Event")
+            }
         }
-    }
-}
 
 struct CheckoutTicketView: View {
+    let event: Event
     var body: some View {
         /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Hello, world!@*/Text("Hello, world!")/*@END_MENU_TOKEN@*/
     }
