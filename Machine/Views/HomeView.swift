@@ -23,14 +23,12 @@ struct HomeView: View {
     @State private var albums: [Album] = []
     
     var body: some View {
-        Text("Home View")
-        
-        
-        
-        
-        
-        
-        
+        VStack {
+            Image("MusicImage")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 400, height: 170)
+        }
     }
 }
 

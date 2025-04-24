@@ -9,6 +9,15 @@ import SwiftUI
 
 struct MerchView: View {
     var body: some View {
-        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Hello, world!@*/Text("Hello, world!")/*@END_MENU_TOKEN@*/
+        VStack {
+            Image("MerchImage")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 400, height: 170)
+        }
     }
+}
+
+#Preview {
+    MerchView()
 }

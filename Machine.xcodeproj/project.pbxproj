@@ -42,6 +42,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C842686D2DBAC2F200DAE095 /* Exceptions for "Machine" folder in "MachineTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GoogleService-Info.plist",
+			);
+			target = C86022952DB6928E00A5CB4A /* MachineTests */;
+		};
+		C842686E2DBAC2F200DAE095 /* Exceptions for "Machine" folder in "MachineUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GoogleService-Info.plist",
+			);
+			target = C860229F2DB6928E00A5CB4A /* MachineUITests */;
+		};
 		C86022E42DB6EEE600A5CB4A /* Exceptions for "Machine" folder in "Machine" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -56,6 +70,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				C86022E42DB6EEE600A5CB4A /* Exceptions for "Machine" folder in "Machine" target */,
+				C842686D2DBAC2F200DAE095 /* Exceptions for "Machine" folder in "MachineTests" target */,
+				C842686E2DBAC2F200DAE095 /* Exceptions for "Machine" folder in "MachineUITests" target */,
 			);
 			path = Machine;
 			sourceTree = "<group>";

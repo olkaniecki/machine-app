@@ -110,14 +110,10 @@ struct TicketView: View {
                 VStack(alignment: .leading) {
                     // Header
                     HStack {
-                        Image("CopperLogo")
+                        Image("TicketImage")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 170, height: 130)
-                        Text("EVENTS")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                            .foregroundColor(.copper)
+                            .frame(width: 400, height: 170)
                     } .padding()
                     
                     // Purchased Tickets
@@ -212,7 +208,7 @@ struct EventView: View {
                                             .resizable()
                                             .scaledToFit()
                                             .frame(width: 150, height: 150)
-                                            .padding(.vertical)
+                                            .padding()
                                     case .failure:
                                         Text("Failed to load image.")
                                     @unknown default:
@@ -242,7 +238,7 @@ struct EventView: View {
                             }.frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .background(Color.gray.opacity(0.2))
-                        .cornerRadius(10)
+                        .cornerRadius(30)
                         .frame(maxWidth: .infinity)
                     }
                 }

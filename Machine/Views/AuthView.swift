@@ -7,7 +7,7 @@
 
 /*
  TODO:
-    - More account information (first/last name, favorite songs, payment history)
+    - More account information (favorite songs, payment history)
     - UI design
     - Asset uploads
  
@@ -16,6 +16,7 @@
 import SwiftUI
 import Firebase
 import FirebaseAuth
+import FirebaseFirestore
 
 struct AuthView: View {
     @State private var isAuthenticated = false
@@ -31,14 +32,58 @@ struct AuthView: View {
             } else if showRegister {
                 RegisterView(showLogin: $showLogin, showRegister: $showRegister, isAuthenticated: $isAuthenticated)
             } else {
-                VStack(spacing: 20) {
+                ZStack {
+                    Color.black
+                        .ignoresSafeArea()
                     
-                    Button("Log In") {
-                        showLogin = true
-                    }
-                    
-                    Button("Register") {
-                        showRegister = true
+                    VStack(spacing: 20) {
+                        Text("Machine Hub")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.copper)
+                        ZStack {
+                            Image("CopperLogo")
+                                .resizable()
+                                .scaledToFit()
+                                .ignoresSafeArea()
+                                .opacity(0.5)
+                            VStack {
+                                Button {
+                                    showLogin = true
+                                } label: {
+                                    HStack {
+                                        Spacer()
+                                        Text("Log in")
+                                            .padding(.vertical, 10)
+                                            .foregroundColor(.copper)
+                                        Spacer()
+                                    }.background(Color.black)
+                                        .overlay (
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.copper, lineWidth: 2)
+                                        )
+                                        .padding()
+                                }
+                                
+                                Button {
+                                    showRegister = true
+                                } label: {
+                                    HStack {
+                                        Spacer()
+                                        Text("Sign Up")
+                                            .padding(.vertical, 10)
+                                            .foregroundColor(.copper)
+                                        Spacer()
+                                    }.background(Color.black)
+                                        .overlay (
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.copper, lineWidth: 2)
+                                        )
+                                        .padding()
+                                }
+                            }
+                            
+                        }
                     }
                 }
             }
@@ -69,7 +114,8 @@ struct LoginView: View {
                 Image("CopperLogo")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 250)
+                    .frame(width: 200)
+                    .padding(.vertical, 10)
                 Text("LOG IN")
                     .font(.largeTitle)
                     .fontWeight(.bold)
@@ -168,7 +214,8 @@ struct RegisterView: View {
                 Image("CopperLogo")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 250)
+                    .frame(width: 200)
+                    .padding(.vertical, 10)
                 Text("SIGN UP")
                     .font(.largeTitle)
                     .fontWeight(.bold)
@@ -227,6 +274,11 @@ struct RegisterView: View {
                             // Catch error message
                             errorMessage = error.localizedDescription
                         } else {
+                            guard let uid = Auth.auth().currentUser?.uid else {
+                                print("No logged-in user.")
+                                return
+                            }
+                            storeUserData(uid: uid, first_name: firstName, last_name: lastName, email: email, password: password)
                             isAuthenticated = true
                             print("Successfully created user: \(result?.user.uid ?? "")")
                         }
@@ -253,6 +305,24 @@ struct RegisterView: View {
             } .padding()
                 .navigationTitle("Machine Register")
                 .foregroundColor(.white)
+        }
+    }
+}
+
+
+// Storing initial user data (UID, name, email, password)
+func storeUserData(uid: String, first_name: String, last_name: String, email: String, password: String) {
+    let db = Firestore.firestore()
+    db.collection("users").document(uid).setData([
+        "First Name": first_name,
+        "Last Name": last_name,
+        "Email": email,
+        "Password": password
+    ]) { error in
+        if let error = error {
+            print("Error writing user data: \(error)")
+        } else {
+            print("User data successfully written.")
         }
     }
 }
