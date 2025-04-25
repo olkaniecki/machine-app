@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyBXEf6hZcLIy56lDD37KZChMocqAwLBZaE</string>
+	<string>AIzaSyDLnw9IFaZr0eSu3plKJZnnzj013WvGS6c</string>
 	<key>GCM_SENDER_ID</key>
-	<string>114808872968</string>
+	<string>897727333930</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.Machine.Machine</string>
 	<key>PROJECT_ID</key>
-	<string>machine-b9dcf</string>
+	<string>machine-app-d9cff</string>
 	<key>STORAGE_BUCKET</key>
-	<string>machine-b9dcf.firebasestorage.app</string>
+	<string>machine-app-d9cff.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:114808872968:ios:a5b82be646818214feb1bd</string>
+	<string>1:897727333930:ios:6ce1e6c1318fc253a96553</string>
 </dict>
 </plist>
