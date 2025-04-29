@@ -34,6 +34,7 @@ struct Ticket: Identifiable {
 }
 
 
+
 // Firestore Database Event Fetching
 class EventModel: ObservableObject {
     @Published var events: [Event] = []
@@ -150,24 +151,31 @@ struct PurchasedTicketView: View {
         } else {
             // List of Purchased Tickets
             ForEach(purchaseModel.tickets) { ticket in
-                NavigationLink(destination: DetailTicketView(ticket: ticket)) {
-                    VStack{
-                        Text(ticket.eventName)
-                            .foregroundColor(.white)
-                            .font(.headline)
-                        Text(ticket.purchaseDate, style: .date)
-                            .foregroundColor(.white)
-                            .font(.subheadline)
+                    HStack {
+                        VStack(alignment: .leading){
+                            Text(ticket.eventName)
+                                .foregroundColor(.white)
+                                .font(.headline)
+                            Text("Purchased: \(ticket.purchaseDate, style: .date)")
+                                .foregroundColor(.copper)
+                                .font(.subheadline)
+                        }
+                        NavigationLink(destination: DetailTicketView(ticket: ticket)) {
+                            
+                            Text("View Ticket")
+                                .foregroundColor(.white)
+                                .padding()
+                        } .background(Color.copper.opacity(0.3))
+                            .cornerRadius(40)
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
                     .frame(minWidth: 40)
                     .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
+                    .cornerRadius(30)
                 }
                 
             }
-        }
         } .onAppear {
             purchaseModel.fetchTickets()
         }
@@ -349,8 +357,58 @@ struct DetailEventView: View {
 
 struct CheckoutTicketView: View {
     let event: Event
+    
+    @State private var ticket_Count = 1
+    
     var body: some View {
-        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Hello, world!@*/Text("Hello, world!")/*@END_MENU_TOKEN@*/
+        ZStack {
+            LinearGradient (
+                gradient: Gradient(colors: [.black, .black, .copper]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+            VStack {
+                HStack {
+                    if let url = URL(string: event.image) {
+                        AsyncImage(url: url) { phase in
+                            switch phase {
+                            case .empty:
+                                Text("Empty")
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 125, height: 125)
+                            case .failure:
+                                Text("Failed to load image.")
+                            @unknown default:
+                                Text("unknown default")
+                            }
+                        }
+                    }
+                    VStack(alignment: .leading){
+                        Text(event.name)
+                            .foregroundColor(.white)
+                        Text(event.date, style: .date)
+                            .foregroundColor(.white)
+                        Text("Price per ticket: $\(event.price).00")
+                            .foregroundColor(.white)
+                        Text("Total: $\(event.price * ticket_Count).00")
+                            .foregroundColor(.white)
+                        
+                    }
+                }
+                .padding()
+                .background(Color.copper.opacity(0.2))
+                    .cornerRadius(20)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                
+                Stepper("Tickets: \(ticket_Count)", value: $ticket_Count, in: 1...10)
+                                    .padding()
+            }
+        }
     }
 }
 
