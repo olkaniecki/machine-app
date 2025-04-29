@@ -25,7 +25,7 @@ struct AuthView: View {
     
     var body: some View {
         if isAuthenticated {
-            HomeView(isAuthenticated: $isAuthenticated)
+            ContentView()
         } else {
             if showLogin {
                 LoginView(showLogin: $showLogin, showRegister: $showRegister, isAuthenticated: $isAuthenticated)
