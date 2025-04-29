@@ -251,12 +251,59 @@ struct EventView: View {
 
 struct DetailTicketView: View {
     let ticket: Ticket
-    
     var body: some View {
-        VStack {
-            
+        ZStack {
+            LinearGradient (
+                gradient: Gradient(colors: [.black, .black, .copper]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+            ScrollView {
+                    HStack(alignment: .center) {
+                        Text(ticket.eventName)
+                            .foregroundColor(.white)
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        Text("Purchased: \(formattedDate)")
+                            .foregroundColor(.white)
+                            .font(.headline)
+                            .padding()
+                            .background(Color.copper.opacity(0.3))
+                            .cornerRadius(40)
+                            .fontWeight(.bold)
+                    }
+                }.background(Color.black.opacity(0.3))
+                    .cornerRadius(25)
+                    .padding()
+                    .frame(width: 350)
+                    .multilineTextAlignment(.center)
+                
+                //NavigationLink(destination: CheckoutTicketView(event: event)) {
+                    HStack {
+                        Text("Add to Wallet")
+                            .font(.title2)
+                            .padding()
+                            .foregroundColor(.white)
+                        Image(systemName: "plus")
+                            .font(.title2)
+                            .foregroundColor(.white)
+                    }
+                    .frame(width: 350)
+                    .padding(.horizontal)
+                    .background(Color.black)
+                    .cornerRadius(40)
+                }.frame(maxWidth: .infinity)
+                    .navigationTitle("Ticket")
+                
+            //}
+                }
+
+    var formattedDate: String {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMMM d, yyyy 'at' h:mm a"
+        return formatter.string(from: ticket.purchaseDate)
         }
-    }
 }
 
 struct DetailEventView: View {
@@ -317,6 +364,22 @@ struct DetailEventView: View {
                     .cornerRadius(25)
                     .padding()
                     .frame(width: 350)
+                    .multilineTextAlignment(.center)
+                
+                VStack(alignment: .leading) {
+                    Text("Description")
+                        .foregroundColor(.white)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .padding(10)
+                    Text(event.description)
+                        .foregroundColor(.white)
+                        .font(.headline)
+                        .padding(10)
+                } .background(Color.black.opacity(0.3))
+                    .cornerRadius(25)
+                    .padding()
+                    .frame(maxWidth: .infinity)
                     .multilineTextAlignment(.center)
                 
                 NavigationLink(destination: CheckoutTicketView(event: event)) {
