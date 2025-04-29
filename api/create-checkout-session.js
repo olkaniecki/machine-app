@@ -1,3 +1,5 @@
+// /api/create-checkout-session.js
+require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 export default async function handler(req, res) {
@@ -6,6 +8,11 @@ export default async function handler(req, res) {
   }
 
   const { productName, amount } = req.body;
+
+  if (!productName || !amount) {
+    console.error("Missing parameters: productName or amount");
+    return res.status(400).json({ error: "Missing productName or amount" });
+  }
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -27,8 +34,12 @@ export default async function handler(req, res) {
       cancel_url: "https://example.com/cancel",
     });
 
-    res.status(200).json({ id: session.id, url: session.url });
+    return res.status(200).json({
+      id: session.id,
+      url: session.url,
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error creating Stripe session:", error);
+    return res.status(500).json({ error: error.message });
   }
 }
