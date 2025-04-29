@@ -1,4 +1,5 @@
 // /api/create-checkout-session.js
+require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 export default async function handler(req, res) {
