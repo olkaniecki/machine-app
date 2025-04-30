@@ -10,6 +10,8 @@ import FirebaseFirestore
 import FirebaseAuth
 import FirebaseStorage
 import UIKit
+import FirebaseFunctions
+import Stripe
 
 // Event Data Structure
 struct Event: Identifiable {

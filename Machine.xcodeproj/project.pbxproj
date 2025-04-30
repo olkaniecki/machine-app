@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A7F0BC72DC2A792009A964B /* Stripe in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7F0BC62DC2A792009A964B /* Stripe */; };
+		6A7F0BC92DC2A792009A964B /* StripeApplePay in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7F0BC82DC2A792009A964B /* StripeApplePay */; };
+		6A7F0BCB2DC2A792009A964B /* StripeCardScan in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7F0BCA2DC2A792009A964B /* StripeCardScan */; };
+		6A7F0BCD2DC2A792009A964B /* StripeConnect in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7F0BCC2DC2A792009A964B /* StripeConnect */; };
+		6A7F0BCF2DC2A792009A964B /* StripeFinancialConnections in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7F0BCE2DC2A792009A964B /* StripeFinancialConnections */; };
+		6A7F0BD12DC2A792009A964B /* StripeIdentity in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7F0BD02DC2A792009A964B /* StripeIdentity */; };
+		6A7F0BD32DC2A792009A964B /* StripePaymentSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7F0BD22DC2A792009A964B /* StripePaymentSheet */; };
+		6A7F0BD52DC2A792009A964B /* StripePayments in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7F0BD42DC2A792009A964B /* StripePayments */; };
+		6A7F0BD72DC2A792009A964B /* StripePaymentsUI in Frameworks */ = {isa = PBXBuildFile; productRef = 6A7F0BD62DC2A792009A964B /* StripePaymentsUI */; };
 		C86022CD2DB69A7500A5CB4A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = C86022CC2DB69A7500A5CB4A /* FirebaseAnalytics */; };
 		C86022CF2DB69A7500A5CB4A /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = C86022CE2DB69A7500A5CB4A /* FirebaseAnalyticsOnDeviceConversion */; };
 		C86022D12DB69A7500A5CB4A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C86022D02DB69A7500A5CB4A /* FirebaseAuth */; };
@@ -50,12 +59,21 @@
 			files = (
 				C86022D72DB69A7500A5CB4A /* FirebaseMessaging in Frameworks */,
 				C86022CD2DB69A7500A5CB4A /* FirebaseAnalytics in Frameworks */,
+				6A7F0BCF2DC2A792009A964B /* StripeFinancialConnections in Frameworks */,
+				6A7F0BD12DC2A792009A964B /* StripeIdentity in Frameworks */,
+				6A7F0BD32DC2A792009A964B /* StripePaymentSheet in Frameworks */,
 				C86022D32DB69A7500A5CB4A /* FirebaseFirestore in Frameworks */,
+				6A7F0BD52DC2A792009A964B /* StripePayments in Frameworks */,
 				C86022D12DB69A7500A5CB4A /* FirebaseAuth in Frameworks */,
+				6A7F0BD72DC2A792009A964B /* StripePaymentsUI in Frameworks */,
 				C86022D92DB69A7500A5CB4A /* FirebaseStorage in Frameworks */,
+				6A7F0BC92DC2A792009A964B /* StripeApplePay in Frameworks */,
 				C86022D52DB69A7500A5CB4A /* FirebaseFirestoreCombine-Community in Frameworks */,
 				C86022CF2DB69A7500A5CB4A /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
+				6A7F0BCB2DC2A792009A964B /* StripeCardScan in Frameworks */,
 				C86022E72DB80AA700A5CB4A /* MusicKit.framework in Frameworks */,
+				6A7F0BCD2DC2A792009A964B /* StripeConnect in Frameworks */,
+				6A7F0BC72DC2A792009A964B /* Stripe in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +132,15 @@
 				C86022D42DB69A7500A5CB4A /* FirebaseFirestoreCombine-Community */,
 				C86022D62DB69A7500A5CB4A /* FirebaseMessaging */,
 				C86022D82DB69A7500A5CB4A /* FirebaseStorage */,
+				6A7F0BC62DC2A792009A964B /* Stripe */,
+				6A7F0BC82DC2A792009A964B /* StripeApplePay */,
+				6A7F0BCA2DC2A792009A964B /* StripeCardScan */,
+				6A7F0BCC2DC2A792009A964B /* StripeConnect */,
+				6A7F0BCE2DC2A792009A964B /* StripeFinancialConnections */,
+				6A7F0BD02DC2A792009A964B /* StripeIdentity */,
+				6A7F0BD22DC2A792009A964B /* StripePaymentSheet */,
+				6A7F0BD42DC2A792009A964B /* StripePayments */,
+				6A7F0BD62DC2A792009A964B /* StripePaymentsUI */,
 			);
 			productName = Machine;
 			productReference = C86022862DB6928600A5CB4A /* Machine.app */;
@@ -145,6 +172,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				C86022CB2DB69A7500A5CB4A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				6A7F0BC52DC2A792009A964B /* XCRemoteSwiftPackageReference "stripe-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C86022872DB6928600A5CB4A /* Products */;
@@ -385,6 +413,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6A7F0BC52DC2A792009A964B /* XCRemoteSwiftPackageReference "stripe-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stripe/stripe-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 24.12.1;
+			};
+		};
 		C86022CB2DB69A7500A5CB4A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -396,6 +432,51 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6A7F0BC62DC2A792009A964B /* Stripe */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A7F0BC52DC2A792009A964B /* XCRemoteSwiftPackageReference "stripe-ios" */;
+			productName = Stripe;
+		};
+		6A7F0BC82DC2A792009A964B /* StripeApplePay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A7F0BC52DC2A792009A964B /* XCRemoteSwiftPackageReference "stripe-ios" */;
+			productName = StripeApplePay;
+		};
+		6A7F0BCA2DC2A792009A964B /* StripeCardScan */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A7F0BC52DC2A792009A964B /* XCRemoteSwiftPackageReference "stripe-ios" */;
+			productName = StripeCardScan;
+		};
+		6A7F0BCC2DC2A792009A964B /* StripeConnect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A7F0BC52DC2A792009A964B /* XCRemoteSwiftPackageReference "stripe-ios" */;
+			productName = StripeConnect;
+		};
+		6A7F0BCE2DC2A792009A964B /* StripeFinancialConnections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A7F0BC52DC2A792009A964B /* XCRemoteSwiftPackageReference "stripe-ios" */;
+			productName = StripeFinancialConnections;
+		};
+		6A7F0BD02DC2A792009A964B /* StripeIdentity */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A7F0BC52DC2A792009A964B /* XCRemoteSwiftPackageReference "stripe-ios" */;
+			productName = StripeIdentity;
+		};
+		6A7F0BD22DC2A792009A964B /* StripePaymentSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A7F0BC52DC2A792009A964B /* XCRemoteSwiftPackageReference "stripe-ios" */;
+			productName = StripePaymentSheet;
+		};
+		6A7F0BD42DC2A792009A964B /* StripePayments */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A7F0BC52DC2A792009A964B /* XCRemoteSwiftPackageReference "stripe-ios" */;
+			productName = StripePayments;
+		};
+		6A7F0BD62DC2A792009A964B /* StripePaymentsUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A7F0BC52DC2A792009A964B /* XCRemoteSwiftPackageReference "stripe-ios" */;
+			productName = StripePaymentsUI;
+		};
 		C86022CC2DB69A7500A5CB4A /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C86022CB2DB69A7500A5CB4A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
