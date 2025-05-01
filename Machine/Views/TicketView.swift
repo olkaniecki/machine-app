@@ -424,6 +424,8 @@ struct CheckoutTicketView: View {
     let event: Event
     
     @State private var ticket_Count = 1
+    @State private var showPaymentView = false
+    @State private var clientSecret: String? = nil
     
     var body: some View {
         ZStack {
@@ -472,9 +474,21 @@ struct CheckoutTicketView: View {
                 
                 Stepper("Tickets: \(ticket_Count)", value: $ticket_Count, in: 1...10)
                                     .padding()
+                NavigationLink(destination: PaymentView(event: event)) {
+                    Text("Proceed to Payment")
+                            .font(.title2)
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(Color.green)
+                            .cornerRadius(10)
+                }
+                .padding()
+                
             }
         }
     }
+    
+    
 }
 
 

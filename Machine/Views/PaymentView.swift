@@ -7,8 +7,9 @@ import FirebaseFirestore
 import FirebaseAuth
 import FirebaseStorage
 import UIKit
-//import FirebaseFunctions
+import FirebaseFunctions
 import Stripe
+import StripePaymentSheet
 
 struct PaymentView: View {
 
@@ -16,6 +17,8 @@ struct PaymentView: View {
     @State private var isLoading = false    // Loading variable for payment processing
     @State private var ticketTotalinCents: Int = 0
     @State private var errorMessage: String?
+    @State private var showStripeSheet = false
+    @State private var clientSecret: String? = nil
     
     var event: Event
     
@@ -48,6 +51,25 @@ struct PaymentView: View {
             .disabled(isLoading)
         }
         .padding()
+        .sheet(isPresented: $showStripeSheet) {
+            if let clientSecret = clientSecret {
+                StripePaymentSheetView(clientSecret: clientSecret) { result in
+                    
+                    showStripeSheet = false
+                    switch result {
+                    case .completed:
+                        print("✅ Payment completed")
+                        logPaymentToFirestore()
+                    case .canceled:
+                        print("⚠️ Payment canceled")
+                    case .failed(let error):
+                        print("❌ Payment failed: \(error)")
+                    }
+
+                    
+                }
+            }
+        }
         .onAppear {
             // Calculate the ticket price into cents for Stripe to recognize it
             ticketTotalinCents = event.price * 100
@@ -59,6 +81,7 @@ struct PaymentView: View {
         errorMessage = nil
         
         functions.httpsCallable("createPaymentIntent").call(["amount": ticketTotalinCents]) { result, error in
+            isLoading = false // reset loading status
             if let error = error {
                 print("Error fetching payment intent: \(error)")
                 return
@@ -66,31 +89,62 @@ struct PaymentView: View {
 
             if let data = result?.data as? [String: Any],
                let clientSecret = data["clientSecret"] as? String {
-                let configuration = PaymentSheet.Configuration()
-                configuration.merchantDisplayName = "Machine-Hub"
-                self.paymentSheet = PaymentSheet(paymentIntentClientSecret: clientSecret, configuration: configuration)
+                self.clientSecret = clientSecret
+                self.showStripeSheet = true
             } else {
                 errorMessage = "Unable to parse ClientSecret"
             }
         
         }
     }
-
-    func presentPaymentSheet(clientSecret: String) {
-        var configuration = PaymentSheet.Configuration()
-        configuration.merchantDisplayName = "Machine-Hub"
-        configuration.applePay = .init(merchantId: "merchant.com.machinehub", merchantCountryCode: "US")
-        self.paymentSheet = PaymentSheet(paymentIntentClientSecret: clientSecret, configuration: configuration)
-        self.paymentSheet?.present(from: self) { result in
-            switch result {
-            case .completed:
-                print("✅ Payment completed")
-            case .canceled:
-                print("⚠️ Payment canceled")
-            case .failed(let error):
-                print("❌ Payment failed: \(error)")
+    
+    func logPaymentToFirestore() {
+        guard let userID = Auth.auth().currentUser?.uid else {
+            print("❌ No authenticated user found.")
+            return
+        }
+        
+        let db = Firestore.firestore()
+        let paymentInfo: [String: Any] = [
+            "userID": userID,
+            "eventID": event.id,
+            "eventName": event.name,
+            "amount": ticketTotalinCents / 100,
+            "timeStamp": FieldValue.serverTimestamp()
+        ]
+        
+        db.collection("payments").addDocument(data: paymentInfo) { error in
+            if let error = error {
+                print("❌ Failed to log payment: \(error.localizedDescription)")
+            } else {
+                print("✅ Payment logged successfully in Firestore")
             }
         }
     }
-
 }
+
+struct StripePaymentSheetView: UIViewControllerRepresentable {
+    let clientSecret: String
+    var onCompletion: (PaymentSheetResult) -> Void
+    
+    func makeUIViewController(context: Context) -> UIViewController {
+        let vc = UIViewController()
+        vc.view.backgroundColor = .clear
+        
+        DispatchQueue.main.async {
+                    var config = PaymentSheet.Configuration()
+                    config.merchantDisplayName = "Machine-Hub"
+                    config.applePay = .init(merchantId: "merchant.com.machinehub", merchantCountryCode: "US")
+                    
+                    let sheet = PaymentSheet(paymentIntentClientSecret: clientSecret, configuration: config)
+                    sheet.present(from: vc) { result in
+                        onCompletion(result)
+                    }
+                }
+
+                return vc
+            }
+
+            func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+        
+    }
